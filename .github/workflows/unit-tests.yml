@@ -1,0 +1,23 @@
+name: 1. Unit Tests
+
+on:
+  push:
+    branches:
+      - '**' # matches every branch
+      - '!main' # excludes main
+
+jobs:
+  unit_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: setup NodeJS
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16.14.0'
+
+    - name: run unit tests
+      run: |
+        npm install
+        npm test
