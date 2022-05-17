@@ -1,0 +1,23 @@
+{
+  "name": "tree-to-html",
+  "version": "1.0.0",
+  "description": "Simple implementation to build HTML according Contentful GraphQL API response",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha --recursive \"src/**/*.test.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/br-monteiro/tree-to-html.git"
+  },
+  "keywords": [],
+  "author": "Edson B S Monteiro <bruno.monteirodg@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/br-monteiro/tree-to-html/issues"
+  },
+  "homepage": "https://github.com/br-monteiro/tree-to-html#readme",
+  "devDependencies": {
+    "mocha": "^10.0.0"
+  }
+}
