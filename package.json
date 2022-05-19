@@ -4,7 +4,8 @@
   "description": "Simple implementation to build HTML according Contentful GraphQL API response",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha --recursive \"src/**/*.test.js\""
+    "test": "mocha --recursive \"src/**/*.test.js\"",
+    "test:watch": "npm run test -- --watch --inline-diffs"
   },
   "repository": {
     "type": "git",
