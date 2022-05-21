@@ -205,7 +205,7 @@ function formatBlockquote(node) {
  * @param { RichTextNode } node
  */
 function formatHr(node) {
-  return abstractFormatNode('', '', node, '<hr>')
+  return abstractFormatNode('<hr>', '', node, '<hr>')
 }
 
 
