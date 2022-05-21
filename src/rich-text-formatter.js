@@ -1,5 +1,7 @@
 const { textBold, textItalic, textUnderline, textCode } = require('./text-marks-formatters')
 
+const BREAK_LINE_DEFINITION = '<br>'
+
 const MARKS_MAP = {
   bold: textBold,
   italic: textItalic,
@@ -76,12 +78,14 @@ function buildContent(nodeContent) {
  * @param { RichTextNode } node
  */
 function formatText(node) {
-  if (node?.marks.length) {
-    return node.marks
-      .reduce((formattedText, mark) => formatTextByMarkType(formattedText, mark.type), node.value)
+  let result = (node?.value || '').replace(/\n/g, BREAK_LINE_DEFINITION)
+
+  if (node?.marks.length && result) {
+    result = node.marks
+      .reduce((formattedText, mark) => formatTextByMarkType(formattedText, mark.type), result)
   }
 
-  return node?.value || ''
+  return result
 }
 
 /**
