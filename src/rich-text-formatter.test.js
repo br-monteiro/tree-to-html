@@ -258,4 +258,384 @@ describe('rich-text-formatter', () => {
       assert.strictEqual('<a href="#">teste de conteúdo</a>', formatText(data))
     })
   })
+
+  describe('#formatText', () => {
+    it('should return an empty string when there is no value', () => {
+      const data = {
+        nodeType: 'text',
+        marks: [],
+        data: {}
+      }
+
+      assert.strictEqual('', formatText(data))
+    })
+
+    it('should return an empty string when thre are marks but there is no value', () => {
+      const data = {
+        nodeType: 'text',
+        marks: [{
+          type: 'underline'
+        },
+        {
+          type: 'italic'
+        },
+        {
+          type: 'bold'
+        }],
+        data: {}
+      }
+
+      assert.strictEqual('', formatText(data))
+    })
+
+    it('should return a text without mark tags', () => {
+      const data = {
+        nodeType: 'text',
+        value: 'teste de conteúdo',
+        marks: [],
+        data: {}
+      }
+
+      assert.strictEqual('teste de conteúdo', formatText(data))
+    })
+
+    it('should return a text with <br>', () => {
+      const data = {
+        nodeType: 'text',
+        value: 'teste\n de\n conteúdo',
+        marks: [],
+        data: {}
+      }
+
+      assert.strictEqual('teste<br> de<br> conteúdo', formatText(data))
+    })
+
+    it('should return a text wrapped with mark tags', () => {
+      const data = {
+        nodeType: 'text',
+        value: 'teste de conteúdo',
+        marks: [{
+          type: 'underline'
+        },
+        {
+          type: 'italic'
+        },
+        {
+          type: 'bold'
+        }],
+        data: {}
+      }
+
+      assert.strictEqual('<b><i><u>teste de conteúdo</u></i></b>', formatText(data))
+    })
+  })
+
+  describe('#formatTable', () => {
+    it('should return an empty string when there is no content itens', () => {
+      const data = {
+        nodeType: 'table',
+        data: {},
+        content: []
+      }
+
+      assert.strictEqual('', formatText(data))
+    })
+
+    it('should return an empty <TABLE> tag', () => {
+      const data = {
+        nodeType: 'table',
+        data: {},
+        content: [{}]
+      }
+
+      assert.strictEqual('<table></table>', formatText(data))
+    })
+
+    it('should return a complete table according content', () => {
+      const expected = '<table><tr><th><p>header 1</p></th><th><p>header 2</p></th></tr><tr><td><p>célula 1</p></td><td><p>célula 2</p></td></tr></table>'
+      const data = {
+        nodeType: 'table',
+        data: {},
+        content: [
+          {
+            nodeType: 'table-row',
+            data: {},
+            content: [
+              {
+                nodeType: 'table-header-cell',
+                data: {},
+                content: [
+                  {
+                    nodeType: 'paragraph',
+                    data: {},
+                    content: [
+                      {
+                        nodeType: 'text',
+                        value: 'header 1',
+                        marks: [],
+                        data: {}
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                nodeType: 'table-header-cell',
+                data: {},
+                content: [
+                  {
+                    nodeType: 'paragraph',
+                    data: {},
+                    content: [
+                      {
+                        nodeType: 'text',
+                        value: 'header 2',
+                        marks: [],
+                        data: {}
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            nodeType: 'table-row',
+            data: {},
+            content: [
+              {
+                nodeType: 'table-cell',
+                data: {},
+                content: [
+                  {
+                    nodeType: 'paragraph',
+                    data: {},
+                    content: [
+                      {
+                        nodeType: 'text',
+                        value: 'célula 1',
+                        marks: [],
+                        data: {}
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                nodeType: 'table-cell',
+                data: {},
+                content: [
+                  {
+                    nodeType: 'paragraph',
+                    data: {},
+                    content: [
+                      {
+                        nodeType: 'text',
+                        value: 'célula 2',
+                        marks: [],
+                        data: {}
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+
+      assert.strictEqual(expected, formatText(data))
+    })
+  })
+
+  describe('#formatTableRow', () => {
+    it('should return an empty string when there is no content itens', () => {
+      const data = {
+        nodeType: 'table-row',
+        data: {},
+        content: []
+      }
+
+      assert.strictEqual('', formatText(data))
+    })
+
+    it('should return an empty <TR> tag', () => {
+      const data = {
+        nodeType: 'table-row',
+        data: {},
+        content: [{}]
+      }
+
+      assert.strictEqual('<tr></tr>', formatText(data))
+    })
+  })
+
+  describe('#formatTableHeaderCell', () => {
+    it('should return an empty string when there is no content itens', () => {
+      const data = {
+        nodeType: 'table-header-cell',
+        data: {},
+        content: []
+      }
+
+      assert.strictEqual('', formatText(data))
+    })
+
+    it('should return an empty <TH> tag', () => {
+      const data = {
+        nodeType: 'table-header-cell',
+        data: {},
+        content: [{}]
+      }
+
+      assert.strictEqual('<th></th>', formatText(data))
+    })
+  })
+
+  describe('#formatTableCell', () => {
+    it('should return an empty string when there is no content itens', () => {
+      const data = {
+        nodeType: 'table-cell',
+        data: {},
+        content: []
+      }
+
+      assert.strictEqual('', formatText(data))
+    })
+
+    it('should return an empty <TD> tag', () => {
+      const data = {
+        nodeType: 'table-cell',
+        data: {},
+        content: [{}]
+      }
+
+      assert.strictEqual('<td></td>', formatText(data))
+    })
+  })
+
+  describe('#formatHr', () => {
+    it('should return a <HR> tag', () => {
+      const data = {
+        nodeType: 'hr',
+        data: {},
+        content: []
+      }
+
+      assert.strictEqual('<hr>', formatText(data))
+    })
+
+    it('should return a <HR> tag after the content', () => {
+      const data = {
+        nodeType: 'hr',
+        data: {},
+        content: [{
+          nodeType: 'text',
+          value: 'teste de conteúdo',
+          marks: [],
+          data: {}
+        }]
+      }
+
+      assert.strictEqual('<hr>teste de conteúdo', formatText(data))
+    })
+  })
+
+  describe('#formatUnorderedList', () => {
+    it('should return an empty string when there is no content itens', () => {
+      const data = {
+        nodeType: 'unordered-list',
+        data: {},
+        content: []
+      }
+
+      assert.strictEqual('', formatText(data))
+    })
+
+    it('should return an empty <UL> tag', () => {
+      const data = {
+        nodeType: 'unordered-list',
+        data: {},
+        content: [{}]
+      }
+
+      assert.strictEqual('<ul></ul>', formatText(data))
+    })
+  })
+
+  describe('#formatOrderedList', () => {
+    it('should return an empty string when there is no content itens', () => {
+      const data = {
+        nodeType: 'ordered-list',
+        data: {},
+        content: []
+      }
+
+      assert.strictEqual('', formatText(data))
+    })
+
+    it('should return an empty <OL> tag', () => {
+      const data = {
+        nodeType: 'ordered-list',
+        data: {},
+        content: [{}]
+      }
+
+      assert.strictEqual('<ol></ol>', formatText(data))
+    })
+  })
+
+  describe('#formatListItem', () => {
+    it('should return an empty string when there is no content itens', () => {
+      const data = {
+        nodeType: 'list-item',
+        data: {},
+        content: []
+      }
+
+      assert.strictEqual('', formatText(data))
+    })
+
+    it('should wrap the content with a <LI> tag', () => {
+      const data = {
+        nodeType: 'list-item',
+        data: {},
+        content: [{
+          nodeType: 'text',
+          value: 'teste de conteúdo',
+          marks: [],
+          data: {}
+        }]
+      }
+
+      assert.strictEqual('<li>teste de conteúdo</li>', formatText(data))
+    })
+  })
+
+  describe('#formatBlockquote', () => {
+    it('should return an empty string when there is no content itens', () => {
+      const data = {
+        nodeType: 'blockquote',
+        data: {},
+        content: []
+      }
+
+      assert.strictEqual('', formatText(data))
+    })
+
+    it('should wrap the content with a <BLOCKQUOTE> tag', () => {
+      const data = {
+        nodeType: 'blockquote',
+        data: {},
+        content: [{
+          nodeType: 'text',
+          value: 'teste de conteúdo',
+          marks: [],
+          data: {}
+        }]
+      }
+
+      assert.strictEqual('<blockquote>teste de conteúdo</blockquote>', formatText(data))
+    })
+  })
 })
