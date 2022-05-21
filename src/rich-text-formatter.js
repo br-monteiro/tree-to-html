@@ -89,7 +89,7 @@ function formatText(node) {
  */
 function formatHyperlink(node) {
   if (node?.content?.length) {
-    const content = buildContent(node?.content)
+    const content = buildContent(node.content)
     return `<a href="${node?.data?.uri || '#'}">${content}</a>`
   }
 
