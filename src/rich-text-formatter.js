@@ -1,5 +1,7 @@
 const { textBold, textItalic, textUnderline, textCode } = require('./text-marks-formatters')
 
+const BREAK_LINE_DEFINITION = '<br>'
+
 const MARKS_MAP = {
   bold: textBold,
   italic: textItalic,
@@ -76,12 +78,14 @@ function buildContent(nodeContent) {
  * @param { RichTextNode } node
  */
 function formatText(node) {
-  if (node?.marks.length) {
-    return node.marks
-      .reduce((formattedText, mark) => formatTextByMarkType(formattedText, mark.type), node.value)
+  let result = (node?.value || '').replace(/\n/g, BREAK_LINE_DEFINITION)
+
+  if (node?.marks.length && result) {
+    result = node.marks
+      .reduce((formattedText, mark) => formatTextByMarkType(formattedText, mark.type), result)
   }
 
-  return node?.value || ''
+  return result
 }
 
 /**
@@ -89,7 +93,7 @@ function formatText(node) {
  */
 function formatHyperlink(node) {
   if (node?.content?.length) {
-    const content = buildContent(node?.content)
+    const content = buildContent(node.content)
     return `<a href="${node?.data?.uri || '#'}">${content}</a>`
   }
 
@@ -205,7 +209,7 @@ function formatBlockquote(node) {
  * @param { RichTextNode } node
  */
 function formatHr(node) {
-  return abstractFormatNode('', '', node, '<hr>')
+  return abstractFormatNode('<hr>', '', node, '<hr>')
 }
 
 
